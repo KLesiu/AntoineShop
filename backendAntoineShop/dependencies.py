@@ -5,9 +5,6 @@ from database import engine, SessionLocal,Base
 from sqlalchemy.orm import Session
 
 
-Base.metadata.create_all(bind=engine)
-
-
 class ItemBase(BaseModel):
     name: str
     price: int

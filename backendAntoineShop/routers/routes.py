@@ -10,6 +10,7 @@ async def create_item(item: ItemBase, db: db_dependency):
     db.add(db_item)
     db.commit()
 
+
 @router.get("/items/{item_id}",status_code=status.HTTP_200_OK)
 async def read_item(item_id:int,db:db_dependency):
     item = db.query(Item).filter(Item.id == item_id).first()

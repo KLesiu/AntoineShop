@@ -2,11 +2,18 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
+
+
 import os
 
 load_dotenv()
 
 URL_DATABASE = os.getenv("DATABASE_URL")
+
+
+def create_tables():
+    Base.metadata.create_all(bind=engine)
+
 
 engine = create_engine(URL_DATABASE)
 
