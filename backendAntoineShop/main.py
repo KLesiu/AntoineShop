@@ -1,8 +1,14 @@
 from fastapi import FastAPI
+from routers.routes import router
+from dependencies import *
 
 app = FastAPI()
 
 
-@app.get("/")
-def test():
-    return "Hello World!"
+
+app.include_router(router)
+
+
+
+
+
