@@ -1,6 +1,6 @@
-from fastapi import APIRouter,HTTPException,status
+from fastapi import APIRouter,status
 from dependencies import db_dependency,ItemBase,UserBase
-from models.models import Item,User
+
 from services.services import create_item_service,create_user_service,delete_item_service,delete_user_service,read_item_service,read_user_service
 
 router = APIRouter()

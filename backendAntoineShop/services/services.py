@@ -1,4 +1,4 @@
-from fastapi import APIRouter,HTTPException,status
+from fastapi import HTTPException
 from dependencies import db_dependency,ItemBase,UserBase
 from models.models import Item,User
 
