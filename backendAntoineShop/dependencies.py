@@ -13,6 +13,11 @@ class ItemBase(BaseModel):
     condition: str
     views: int
 
+class UserBase(BaseModel):
+    name:str
+    password:str
+    admin:bool
+    balance:int
 
 def get_db():
     db = SessionLocal()

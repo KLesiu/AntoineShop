@@ -1,4 +1,4 @@
-from sqlalchemy import Column,Integer,String
+from sqlalchemy import Column,Integer,String,Boolean
 from database import Base
 
 
@@ -11,4 +11,12 @@ class Item(Base):
     size = Column(String(5))
     condition = Column(String(10))
     views = Column(Integer)
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer,primary_key=True,index=True)
+    name = Column(String(30))
+    password = Column(String(40))
+    admin = Column(Boolean)
+    balance = Column(Integer)
     
