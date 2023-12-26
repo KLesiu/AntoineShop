@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from dependencies import db_dependency,ItemBase,UserBase
 from models.models import Item,User
+from helpers.helpers import check_is_username_available
 
 async def create_item_service(item: ItemBase, db: db_dependency):
     db_item = Item(**item.dict())
@@ -25,6 +26,8 @@ async def delete_item_service(item_id:int,db:db_dependency):
         return item
     
 async def create_user_service(user:UserBase,db:db_dependency):
+    if await check_is_username_available(user,db) == False:
+        raise HTTPException(status_code=409,detail="This username is not available")
     db_user = User(**user.dict())
     db.add(db_user)
     db.commit()
