@@ -26,7 +26,10 @@ async def delete_item(item_id:int,db:db_dependency):
     item = db.query(Item).filter(Item.id==item_id).first()
     if item is None:
         raise HTTPException(status_code=404,detail="Item not found")
-    return item + " deleted"
+    else:
+        db.delete(item)
+        db.commit()
+        return item
 
 # Users
 @router.post("/users/",status_code=status.HTTP_201_CREATED)
@@ -42,6 +45,16 @@ async def read_user(user_id:int,db:db_dependency):
     if user is None:
         raise HTTPException(status_code=404,detail="User not found")
     return user
+
+@router.delete("/users/{user_id}",status_code=status.HTTP_202_ACCEPTED)
+async def delete_user(user_id:int,db:db_dependency):
+    user = db.query(User).filter(User.id==user_id).first()
+    if user is None:
+        raise HTTPException(status_code=404,detail="User not found")
+    else:
+        db.delete(user)
+        db.commit()
+        return user
 
 
 
