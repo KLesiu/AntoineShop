@@ -14,7 +14,7 @@ async def check_is_username_available(user:UserBase,db:db_dependency):
     else:
         return False
     
-def register(user:UserBase):
+def hash_user_password(user:UserBase):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
