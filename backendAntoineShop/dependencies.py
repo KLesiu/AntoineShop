@@ -18,6 +18,7 @@ class UserBase(BaseModel):
     password:str
     admin:bool
     balance:int
+    loyalityPoints:int
 
 def get_db():
     db = SessionLocal()
