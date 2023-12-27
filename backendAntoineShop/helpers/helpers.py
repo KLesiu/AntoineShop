@@ -1,8 +1,9 @@
 from fastapi import HTTPException,FastAPI, Depends, HTTPException, status
-from dependencies import db_dependency,ItemBase,UserBase
+from dependencies import db_dependency,ItemBase,UserBase,UserLogin
 from models.models import Item,User
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
+import bcrypt
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -21,7 +22,14 @@ def hash_user_password(user:UserBase):
         headers={"WWW-Authenticate": "Bearer"},
     )
     user.password=pwd_context.hash(user.password)
-    print(user)
     if user is None:
         raise credentials_exception
-    return user    
+    return user
+
+def check_user_password(correctPassword,password):
+    result = bcrypt.checkpw(password.encode('utf-8'),correctPassword.encode('utf-8'))
+    return result
+    
+
+
+
