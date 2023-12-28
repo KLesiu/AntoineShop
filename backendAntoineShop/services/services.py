@@ -2,6 +2,8 @@ from fastapi import HTTPException
 from dependencies import db_dependency,ItemBase,UserBase,UserLogin
 from models.models import Item,User
 from helpers.helpers import check_is_username_available,hash_user_password,check_user_password
+from helpers.mailer import send_verification_email
+import secrets
 
 async def create_item_service(item: ItemBase, db: db_dependency):
     db_item = Item(**item.dict())
@@ -32,6 +34,8 @@ async def create_user_service(user:UserBase,db:db_dependency):
     db_user = User(**user.dict())
     db.add(db_user)
     db.commit()
+    verification_token = secrets.token_urlsafe(16)
+    send_verification_email(user.email,verification_token)
     return user
 
 async def read_user_service(user_id:int,db:db_dependency):

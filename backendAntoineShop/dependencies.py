@@ -19,6 +19,7 @@ class UserBase(BaseModel):
     admin:bool
     balance:int
     loyalityPoints:int
+    email:str
 
 class UserLogin(BaseModel):
     name:str

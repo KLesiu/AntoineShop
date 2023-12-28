@@ -20,4 +20,5 @@ class User(Base):
     admin = Column(Boolean)
     balance = Column(Integer)
     loyalityPoints = Column(Integer)
+    email = Column(String(40))
     
