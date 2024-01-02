@@ -21,4 +21,7 @@ class User(Base):
     balance = Column(Integer)
     loyalityPoints = Column(Integer)
     email = Column(String(40))
+    token = Column(String(40))
+    verification = Column(Boolean)
+    __allow_unmapped__ = True
     

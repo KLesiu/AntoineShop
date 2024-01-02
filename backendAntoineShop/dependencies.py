@@ -20,6 +20,9 @@ class UserBase(BaseModel):
     balance:int
     loyalityPoints:int
     email:str
+    token: str
+    verification: bool
+    
 
 class UserLogin(BaseModel):
     name:str

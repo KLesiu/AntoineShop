@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from dependencies import db_dependency,ItemBase,UserBase,UserLogin
 from models.models import Item,User
-from helpers.helpers import check_is_username_available,hash_user_password,check_user_password
+from helpers.helpers import check_is_username_available,hash_user_password,check_user_password,verify_user_token
 from helpers.mailer import send_verification_email
 import secrets
 
@@ -31,10 +31,12 @@ async def create_user_service(user:UserBase,db:db_dependency):
     if await check_is_username_available(user,db) == False:
         raise HTTPException(status_code=409,detail="This username is not available")
     user = hash_user_password(user)
+    verification_token = secrets.token_urlsafe(16)
+    user.token = verification_token
     db_user = User(**user.dict())
     db.add(db_user)
     db.commit()
-    verification_token = secrets.token_urlsafe(16)
+
     send_verification_email(user.email,verification_token)
     return user
 
@@ -62,3 +64,14 @@ async def user_login_service(user:UserLogin,db:db_dependency):
             return findUser
         else:
             raise HTTPException(status_code=401,detail="Wrong password")
+        
+async def user_verification_service(db:db_dependency,token):
+    isVerified = verify_user_token(token,db)
+    if isVerified:
+        findUser = db.query(User).filter(User.token == token).first()
+        findUser.verification = True
+        db.commit()
+        db.refresh(findUser)
+        return "You are verified"
+    else:
+        return "Incorrect token!"

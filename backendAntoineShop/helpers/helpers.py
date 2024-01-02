@@ -29,6 +29,17 @@ def hash_user_password(user:UserBase):
 def check_user_password(correctPassword,password):
     result = bcrypt.checkpw(password.encode('utf-8'),correctPassword.encode('utf-8'))
     return result
+
+def verify_user_token(token,db:db_dependency):
+    findUserWithGivenToken = db.query(User).filter(User.token == token).first()
+    if findUserWithGivenToken is None:
+        return False
+    else:
+        return True
+
+
+
+
     
 
 
