@@ -16,7 +16,20 @@ async def read_item_service(item_id:int,db:db_dependency):
     if item is None:
         raise HTTPException(status_code=404,detail="Item not found")
     return item
-        
+
+async def edit_item_service(item_id:int,db:db_dependency,item:ItemBase):
+    findItem = db.query(Item).filter(Item.id == item_id).first()
+    if findItem is None:
+        raise HTTPException(status_code=404,detail="Item not found")
+    else:
+       findItem.brand = item.brand
+       findItem.condition = item.condition
+       findItem.name = item.name
+       findItem.price = item.price
+       findItem.size = item.size
+       db.commit()
+       db.refresh(findItem)
+       return findItem        
 
 async def delete_item_service(item_id:int,db:db_dependency):
     item = db.query(Item).filter(Item.id==item_id).first()
