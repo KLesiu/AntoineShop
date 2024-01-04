@@ -73,6 +73,7 @@ async def delete_user_service(user_id:int,db:db_dependency):
         db.delete(user)
         db.commit()
         return user
+
 async def user_login_service(user:UserLogin,db:db_dependency):
     findUser = db.query(User).filter(User.name == user.name).first()
     if findUser is None:
