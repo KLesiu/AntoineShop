@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from dependencies import db_dependency,ItemBase,UserBase,UserLogin
 from models.models import Item,User
-from helpers.helpers import check_is_username_available,hash_user_password,check_user_password,verify_user_token
+from helpers.helpers import check_is_username_available,hash_user_password,check_user_password,verify_user_token,update_user_balance
 from helpers.mailer import send_verification_email
 import secrets
 
@@ -95,3 +95,8 @@ async def user_verification_service(db:db_dependency,token):
         return "You are verified"
     else:
         return "Incorrect token!"
+
+async def user_balance_service(db:db_dependency,user_id:int,credits:int):
+    user = db.query(User).filter(User.id == user_id).first()
+    return update_user_balance(user,db,credits)
+

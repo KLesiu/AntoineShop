@@ -1,7 +1,7 @@
 from fastapi import APIRouter,status
 from dependencies import db_dependency,ItemBase,UserBase,UserLogin
 
-from services.services import create_item_service,create_user_service,delete_item_service,delete_user_service,read_item_service,read_user_service,user_login_service,user_verification_service,edit_item_service,get_items_service
+from services.services import create_item_service,create_user_service,delete_item_service,delete_user_service,read_item_service,read_user_service,user_login_service,user_verification_service,edit_item_service,get_items_service,user_balance_service
 
 router = APIRouter()
 
@@ -46,6 +46,10 @@ async def login_user(user:UserLogin,db:db_dependency):
 @router.post("/users/verify",status_code=status.HTTP_200_OK)
 async def verify_user(db:db_dependency,token):
     return await user_verification_service(db,token)
+
+@router.put("/users/{user_id}/balance",status_code=status.HTTP_200_OK)
+async def update_user_balance(db:db_dependency,user_id:int,credits:int):
+    return await user_balance_service(db,user_id,credits) 
 
 
     

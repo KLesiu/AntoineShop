@@ -37,7 +37,13 @@ def verify_user_token(token,db:db_dependency):
     else:
         return True
 
-
+def update_user_balance(user:UserBase,db:db_dependency,credits:int):
+    user.balance += credits
+    if(user.balance < 0):
+        return "You dont have enough money"
+    db.commit()
+    db.refresh(user)
+    return user.balance
 
 
     
