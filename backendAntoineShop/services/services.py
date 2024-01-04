@@ -11,6 +11,12 @@ async def create_item_service(item: ItemBase, db: db_dependency):
     db.commit()
     return item
 
+async def get_items_service(db:db_dependency):
+    items = db.query(Item).all()
+    if items is None:
+        raise HTTPException(status_code=404,detail="Items not found")
+    return items
+
 async def read_item_service(item_id:int,db:db_dependency):
     item = db.query(Item).filter(Item.id == item_id).first()
     if item is None:
