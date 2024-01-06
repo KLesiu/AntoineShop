@@ -4,7 +4,13 @@ module.exports = {
     "./src/**/*.{html,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        'xl':'26rem',
+        '2xl': '32rem',
+        '3xl': '48rem',
+      },
+    },
   },
   plugins: [],
 }
