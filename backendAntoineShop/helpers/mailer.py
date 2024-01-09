@@ -29,17 +29,17 @@ def send_verification_email(email_to: str, verification_token: str):
         server.login(email_config["email_address"], email_config["email_password"])
         server.sendmail(email_config["email_address"], email_to, msg.as_string())
 
-def send_email_after_purchase(email_to: str,price:float,items_names,address:str,items_sizes):
+def send_email_after_purchase(email_to: str,price:float,items,address:str):
     msg = MIMEMultipart()
     msg['From'] = email_config["email_address"]
     msg['To'] = email_to
     msg['Subject'] = 'Thank You for your order from our store!'
 
     body = f'Your order:/n'
-    for item_name in items_names:
-        body += f'-{item_name}'
-    for item_size in items_sizes:
-        body += f'(size:{item_size}) /n'
+    for item in items:
+        body += f'-{item["name"]}'
+    for item in items:
+        body += f'(size:{item["size"]}) /n'
     body += f'Price: {price} /n'
     body += f'Your order will be available to pick in 5 days at {address}'
     msg.attach(MIMEText(body, 'plain'))

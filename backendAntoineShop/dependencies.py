@@ -4,6 +4,9 @@ from typing import Annotated
 from database import engine, SessionLocal,Base
 from sqlalchemy.orm import Session
 
+class Token(BaseModel):
+    access_token:str
+    token_type:str
 
 class ItemBase(BaseModel):
     name: str

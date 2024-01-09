@@ -1,8 +1,8 @@
 from fastapi import APIRouter,status
-from dependencies import db_dependency,ItemBase,UserBase,UserLogin
+from dependencies import db_dependency,ItemBase,UserBase,UserLogin,Token
 
 from services.services import create_item_service,create_user_service,delete_item_service,delete_user_service,read_item_service,read_user_service,user_login_service,user_verification_service,edit_item_service,get_items_service,user_balance_service
-
+from auth import create_access_token
 router = APIRouter()
 
 # Items
@@ -41,15 +41,19 @@ async def delete_user(user_id:int,db:db_dependency):
 
 @router.post("/users/login",status_code=status.HTTP_200_OK)
 async def login_user(user:UserLogin,db:db_dependency):
-    return await user_login_service(user,db)
+    login = await user_login_service(user,db)
+    return create_access_token(login['name'],login['id'])
 
 @router.post("/users/verify",status_code=status.HTTP_200_OK)
 async def verify_user(db:db_dependency,token):
-    return await user_verification_service(db,token)
+    return user_verification_service(db,token)
 
 @router.put("/users/{user_id}/balance",status_code=status.HTTP_200_OK)
 async def update_user_balance(db:db_dependency,user_id:int,credits:int):
     return await user_balance_service(db,user_id,credits) 
+
+
+
 
 
     

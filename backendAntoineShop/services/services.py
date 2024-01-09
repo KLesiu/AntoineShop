@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from dependencies import db_dependency,ItemBase,UserBase,UserLogin
 from models.models import Item,User
 from helpers.helpers import check_is_username_available,hash_user_password,check_user_password,verify_user_token,update_user_balance
-from helpers.mailer import send_verification_email
+from helpers.mailer import send_verification_email,send_email_after_purchase
 import secrets
 
 async def create_item_service(item: ItemBase, db: db_dependency):
@@ -92,7 +92,7 @@ async def user_login_service(user:UserLogin,db:db_dependency):
         else:
             raise HTTPException(status_code=401,detail="Wrong password")
         
-async def user_verification_service(db:db_dependency,token):
+def user_verification_service(db:db_dependency,token):
     isVerified = verify_user_token(token,db)
     if isVerified:
         findUser = db.query(User).filter(User.token == token).first()
@@ -107,3 +107,8 @@ async def user_balance_service(db:db_dependency,user_id:int,credits:int):
     user = db.query(User).filter(User.id == user_id).first()
     return update_user_balance(user,db,credits)
 
+async def user_email_after_purchase_service(db:db_dependency,user_id:int,price:int,items,address:str):
+    user = db.query(User).filter(User.id == user_id).first()
+    if(user.balance < price):
+        return "You dont have enough credits to buy this items, please add credits then try again"
+    return send_email_after_purchase(user.email,price,items,address)
