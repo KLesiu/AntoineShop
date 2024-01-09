@@ -81,7 +81,14 @@ async def user_login_service(user:UserLogin,db:db_dependency):
     else:
         result = check_user_password(findUser.password,user.password)
         if result:
-            return findUser
+            return {
+                'name': findUser.name,
+                'admin': findUser.admin,
+                'balance': findUser.balance,
+                'id': findUser.id,
+                'loyalityPoints': findUser.loyalityPoints,
+                'verification': findUser.verification
+            }
         else:
             raise HTTPException(status_code=401,detail="Wrong password")
         
